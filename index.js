@@ -22,7 +22,6 @@ const statusMessages = [
   { type: ActivityType.Watching, message: "Greenville Roleplay Complex" }
 ];
 
-let currentIndex = 0;
 const channelId = ''; // You need to fill this with your desired text channel ID
 
 async function login() {
@@ -36,22 +35,20 @@ async function login() {
 }
 
 function updateStatusAndSendMessages() {
-  const currentStatus = statusMessages[currentIndex];
+  const status = statusMessages[0]; // Get the only status message directly
 
   client.user.setPresence({
-    activities: [{ name: currentStatus.message, type: currentStatus.type }],
+    activities: [{ name: status.message, type: status.type }],
     status: 'online',
   });
 
   const textChannel = client.channels.cache.get(channelId);
 
   if (textChannel instanceof TextChannel) {
-    textChannel.send(`Bot status is: ${currentStatus.message}`);
+    textChannel.send(`Bot status is: ${status.message}`);
   } else {
     console.log('Text channel not found or invalid.');
   }
-
-  currentIndex = (currentIndex + 1) % statusMessages.length;
 }
 
 client.once('ready', () => {
