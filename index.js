@@ -18,14 +18,12 @@ app.listen(port, () => {
   console.log(`🔗 Powered By RTX`);
 });
 
-// Updated statusMessages array with the invite link
 const statusMessages = [
-  "WATCHING Greenville Roleplay Complex",
-  
+  { type: ActivityType.Watching, message: "Greenville Roleplay Complex" }
 ];
 
 let currentIndex = 0;
-const channelId = '';
+const channelId = ''; // You need to fill this with your desired text channel ID
 
 async function login() {
   try {
@@ -39,17 +37,16 @@ async function login() {
 
 function updateStatusAndSendMessages() {
   const currentStatus = statusMessages[currentIndex];
-  const nextStatus = statusMessages[(currentIndex + 1) % statusMessages.length];
 
   client.user.setPresence({
-    activities: [{ name: currentStatus, type: ActivityType.Watching }],
+    activities: [{ name: currentStatus.message, type: currentStatus.type }],
     status: 'online',
   });
 
   const textChannel = client.channels.cache.get(channelId);
 
   if (textChannel instanceof TextChannel) {
-    textChannel.send(`Bot status is: ${currentStatus}`);
+    textChannel.send(`Bot status is: ${currentStatus.message}`);
   } else {
     console.log('Text channel not found or invalid.');
   }
